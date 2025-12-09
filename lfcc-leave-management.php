@@ -70,7 +70,7 @@ class LFCC_Leave_Management {
         add_action('wp_ajax_lfcc_leave_ajax', array($this, 'handle_ajax_request'));
         add_action('wp_ajax_nopriv_lfcc_leave_ajax', array($this, 'handle_ajax_request'));
         add_action('template_redirect', array($this, 'handle_subdomain_access'));
-        add_action('wp_loaded', array($this, 'check_subdomain_access'));
+        add_action('admin_init', array($this, 'check_subdomain_access'));
     }
     
     /**

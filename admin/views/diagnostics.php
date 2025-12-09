@@ -20,8 +20,23 @@ foreach ($default_options as $setting => $default_value) {
 $current_host = $_SERVER['HTTP_HOST'] ?? 'Unknown';
 $main_host = parse_url(get_site_url(), PHP_URL_HOST);
 $subdomain_name = LFCC_Leave_Settings::get_option('subdomain_name', '');
-$expected_subdomain = $subdomain_name . '.' . preg_replace('/^www\./', '', $main_host);
 
+// Construct expected subdomain URL safely
+if (!empty($subdomain_name)) {
+    $expected_subdomain = $subdomain_name . '.' . preg_replace('/^www\./', '', $main_host);
+} else {
+    $expected_subdomain = '(not configured)';
+}
+
+// Handle manual table creation
+if (isset($_POST['create_tables']) && wp_verify_nonce($_POST['lfcc_create_tables_nonce'], 'lfcc_create_tables')) {
+    try {
+        LFCC_Leave_Database::get_instance()->create_tables();
+        echo '<div class="notice notice-success"><p>' . __('Database tables created successfully!', 'lfcc-leave-management') . '</p></div>';
+    } catch (Exception $e) {
+        echo '<div class="notice notice-error"><p>' . __('Error creating tables: ', 'lfcc-leave-management') . esc_html($e->getMessage()) . '</p></div>';
+    }
+}
 ?>
 
 <div class="wrap">
@@ -133,6 +148,7 @@ $expected_subdomain = $subdomain_name . '.' . preg_replace('/^www\./', '', $main
             
             foreach ($tables as $name => $table_name) {
                 $exists = $wpdb->get_var("SHOW TABLES LIKE '$table_name'") === $table_name;
+                $all_tables_exist = isset($all_tables_exist) ? $all_tables_exist && $exists : $exists;
                 echo '<tr>';
                 echo '<td><strong>' . esc_html($name) . '</strong><br><code>' . esc_html($table_name) . '</code></td>';
                 echo '<td>';
@@ -148,5 +164,18 @@ $expected_subdomain = $subdomain_name . '.' . preg_replace('/^www\./', '', $main
             ?>
         </tbody>
     </table>
+    
+    <?php if (!$all_tables_exist): ?>
+    <div class="notice notice-warning" style="margin-top: 20px;">
+        <p><strong><?php _e('Some database tables are missing!', 'lfcc-leave-management'); ?></strong></p>
+        <p><?php _e('This usually happens if the plugin activation hook did not run properly. You can create the tables manually by clicking the button below.', 'lfcc-leave-management'); ?></p>
+        <form method="post" action="">
+            <?php wp_nonce_field('lfcc_create_tables', 'lfcc_create_tables_nonce'); ?>
+            <button type="submit" name="create_tables" class="button button-primary">
+                <?php _e('Create Missing Tables', 'lfcc-leave-management'); ?>
+            </button>
+        </form>
+    </div>
+    <?php endif; ?>
 </div>
 
