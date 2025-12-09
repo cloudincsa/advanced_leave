@@ -444,12 +444,21 @@ class LFCC_Leave_Database {
      * Get setting
      */
     public function get_setting($option_name, $default = '') {
+        // Try to get from custom table first
         $value = $this->wpdb->get_var(
             $this->wpdb->prepare(
                 "SELECT option_value FROM {$this->settings_table} WHERE option_name = %s",
                 $option_name
             )
         );
+        
+        // If not found in custom table, try WordPress options as fallback
+        if ($value === null) {
+            $wp_option = get_option('lfcc_leave_' . $option_name, null);
+            if ($wp_option !== null) {
+                return $wp_option;
+            }
+        }
         
         return $value !== null ? $value : $default;
     }
@@ -458,6 +467,10 @@ class LFCC_Leave_Database {
      * Update setting
      */
     public function update_setting($option_name, $option_value) {
+        // Save to WordPress options as backup
+        update_option('lfcc_leave_' . $option_name, $option_value);
+        
+        // Save to custom table
         $existing = $this->wpdb->get_var(
             $this->wpdb->prepare(
                 "SELECT id FROM {$this->settings_table} WHERE option_name = %s",
@@ -466,7 +479,7 @@ class LFCC_Leave_Database {
         );
         
         if ($existing) {
-            return $this->wpdb->update(
+            $result = $this->wpdb->update(
                 $this->settings_table,
                 array('option_value' => $option_value),
                 array('option_name' => $option_name),
@@ -474,7 +487,7 @@ class LFCC_Leave_Database {
                 array('%s')
             );
         } else {
-            return $this->wpdb->insert(
+            $result = $this->wpdb->insert(
                 $this->settings_table,
                 array(
                     'option_name' => $option_name,
@@ -483,6 +496,17 @@ class LFCC_Leave_Database {
                 array('%s', '%s')
             );
         }
+        
+        // Log the save operation
+        $logger = LFCC_Leave_Logger::get_instance();
+        $logger->info("Setting updated", array(
+            'option_name' => $option_name,
+            'option_value' => $option_value,
+            'custom_table_result' => $result !== false ? 'success' : 'failed',
+            'wp_option_saved' => 'yes'
+        ));
+        
+        return $result;
     }
     
     /**
