@@ -92,6 +92,47 @@ if (isset($_POST['create_tables']) && wp_verify_nonce($_POST['lfcc_create_tables
                     <?php endif; ?>
                 </td>
             </tr>
+            <?php if (!empty($subdomain_name) && $current_settings['subdomain_enabled'] === 'yes'): ?>
+            <tr>
+                <td><strong><?php _e('DNS Configuration Check', 'lfcc-leave-management'); ?></strong></td>
+                <td>
+                    <?php
+                    // Check if subdomain DNS is configured
+                    $dns_check_result = 'Unknown';
+                    $dns_check_color = 'gray';
+                    $dns_check_message = '';
+                    
+                    if (function_exists('dns_get_record') && !empty($expected_subdomain)) {
+                        // Try to get DNS records for the subdomain
+                        $dns_records = @dns_get_record($expected_subdomain, DNS_A + DNS_CNAME);
+                        
+                        if ($dns_records && count($dns_records) > 0) {
+                            $dns_check_result = '✓ Configured';
+                            $dns_check_color = 'green';
+                            
+                            // Show what the subdomain points to
+                            foreach ($dns_records as $record) {
+                                if ($record['type'] === 'A') {
+                                    $dns_check_message .= '<br><small>A Record → ' . esc_html($record['ip']) . '</small>';
+                                } elseif ($record['type'] === 'CNAME') {
+                                    $dns_check_message .= '<br><small>CNAME → ' . esc_html($record['target']) . '</small>';
+                                }
+                            }
+                        } else {
+                            $dns_check_result = '✗ Not Found';
+                            $dns_check_color = 'red';
+                            $dns_check_message = '<br><small>No DNS records found for ' . esc_html($expected_subdomain) . '</small>';
+                            $dns_check_message .= '<br><small>Please configure an A record or CNAME pointing to your server.</small>';
+                        }
+                    } else {
+                        $dns_check_message = '<br><small>DNS check not available on this server</small>';
+                    }
+                    ?>
+                    <span style="color: <?php echo $dns_check_color; ?>;"><strong><?php echo $dns_check_result; ?></strong></span>
+                    <?php echo $dns_check_message; ?>
+                </td>
+            </tr>
+            <?php endif; ?>
         </tbody>
     </table>
     
