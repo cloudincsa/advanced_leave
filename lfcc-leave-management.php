@@ -344,14 +344,23 @@ class LFCC_Leave_Management {
         }
         
         $current_host = $_SERVER['HTTP_HOST'] ?? '';
-        $main_host = parse_url(get_site_url(), PHP_URL_HOST);
         
-        // Remove www. prefix if present
-        $main_host = preg_replace('/^www\./', '', $main_host);
+        // Check if current host matches the subdomain name
+        // This works whether WordPress is on main domain or a subdomain
+        if (strpos($current_host, $subdomain_name . '.') === 0) {
+            // Current host starts with subdomain name (e.g., leave.littlefalls.co.za)
+            return true;
+        }
         
-        $expected_subdomain_host = $subdomain_name . '.' . $main_host;
+        // Also check if the entire host matches the subdomain name
+        // This handles cases where WordPress site URL is set to the subdomain itself
+        $site_host = parse_url(get_site_url(), PHP_URL_HOST);
+        if ($current_host === $site_host && strpos($site_host, $subdomain_name . '.') === 0) {
+            // WordPress is installed on the subdomain itself
+            return true;
+        }
         
-        return $current_host === $expected_subdomain_host;
+        return false;
     }
     
     /**
