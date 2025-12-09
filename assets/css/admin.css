@@ -1,0 +1,342 @@
+/**
+ * LFCC Leave Management Admin Styles
+ * Styles for the admin interface
+ */
+
+/* Settings Tabs */
+.lfcc-settings-tabs {
+    margin-top: 20px;
+}
+
+.nav-tab-wrapper {
+    border-bottom: 1px solid #ccd0d4;
+    margin-bottom: 20px;
+}
+
+.nav-tab {
+    background: #f1f1f1;
+    border: 1px solid #ccd0d4;
+    border-bottom: none;
+    color: #555;
+    text-decoration: none;
+    padding: 10px 15px;
+    margin-right: 5px;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.nav-tab:hover {
+    background: #e9e9e9;
+    color: #333;
+}
+
+.nav-tab-active {
+    background: #fff;
+    border-bottom: 1px solid #fff;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: -1px;
+}
+
+.tab-content {
+    display: none;
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ccd0d4;
+    border-top: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Form Styling */
+.form-table th {
+    width: 200px;
+    font-weight: 600;
+}
+
+.form-table td {
+    padding: 15px 10px;
+}
+
+.form-table input[type="text"],
+.form-table input[type="email"],
+.form-table input[type="url"],
+.form-table input[type="password"],
+.form-table input[type="number"],
+.form-table textarea,
+.form-table select {
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-table textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+.form-table .description {
+    color: #666;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* Checkbox Styling */
+.form-table input[type="checkbox"] {
+    margin-right: 8px;
+    transform: scale(1.2);
+}
+
+.form-table label {
+    display: inline-flex;
+    align-items: center;
+    font-weight: normal;
+}
+
+/* Info Boxes */
+.lfcc-info-box {
+    background: #f0f6fc;
+    border: 1px solid #c3d9ff;
+    border-left: 4px solid #0073aa;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.lfcc-info-box h3 {
+    margin-top: 0;
+    color: #0073aa;
+}
+
+.lfcc-info-box ol {
+    margin-left: 20px;
+}
+
+/* Warning Boxes */
+.lfcc-warning-box {
+    background: #fff8e1;
+    border: 1px solid #ffcc02;
+    border-left: 4px solid #ff9800;
+    padding: 15px;
+    margin: 20px 0;
+}
+
+.lfcc-warning-box h3 {
+    margin-top: 0;
+    color: #ff9800;
+}
+
+/* Success Messages */
+.notice-success {
+    border-left-color: #46b450;
+}
+
+/* Error Messages */
+.error-message {
+    color: #d63638;
+    font-size: 12px;
+    display: block;
+    margin-top: 5px;
+}
+
+.form-table input.error {
+    border-color: #d63638;
+    box-shadow: 0 0 2px rgba(214, 54, 56, 0.3);
+}
+
+/* Character Counter */
+.char-counter {
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px;
+}
+
+.char-counter.warning {
+    color: #ff9800;
+    font-weight: bold;
+}
+
+/* Auto-save Indicator */
+.form-table input.saved {
+    border-color: #46b450;
+    box-shadow: 0 0 2px rgba(70, 180, 80, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* Button Styling */
+.button-primary {
+    background: #0073aa;
+    border-color: #0073aa;
+    color: #fff;
+}
+
+.button-primary:hover {
+    background: #005a87;
+    border-color: #005a87;
+}
+
+/* SMTP Settings Toggle */
+#smtp_settings {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#smtp_settings h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+/* Subdomain Preview */
+#subdomain-preview {
+    font-weight: bold;
+    color: #0073aa;
+    background: #f0f6fc;
+    padding: 5px 10px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+/* Loading States */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-tab {
+        display: block;
+        margin-bottom: 5px;
+        margin-right: 0;
+    }
+    
+    .form-table th,
+    .form-table td {
+        display: block;
+        width: 100%;
+        padding: 10px 0;
+    }
+    
+    .form-table th {
+        border-bottom: none;
+        padding-bottom: 5px;
+    }
+    
+    .form-table input[type="text"],
+    .form-table input[type="email"],
+    .form-table input[type="url"],
+    .form-table input[type="password"],
+    .form-table input[type="number"],
+    .form-table textarea,
+    .form-table select {
+        max-width: 100%;
+    }
+}
+
+/* Dashboard Widgets */
+.lfcc-dashboard-widget {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.lfcc-dashboard-widget h3 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.lfcc-stat-box {
+    display: inline-block;
+    background: #f0f6fc;
+    border: 1px solid #c3d9ff;
+    border-radius: 4px;
+    padding: 15px;
+    margin: 10px 10px 10px 0;
+    text-align: center;
+    min-width: 120px;
+}
+
+.lfcc-stat-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0073aa;
+    display: block;
+}
+
+.lfcc-stat-label {
+    font-size: 12px;
+    color: #666;
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+
+/* Table Styling */
+.lfcc-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.lfcc-data-table th,
+.lfcc-data-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.lfcc-data-table th {
+    background: #f1f1f1;
+    font-weight: 600;
+}
+
+.lfcc-data-table tr:hover {
+    background: #f9f9f9;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: #fff8e1;
+    color: #ff9800;
+    border: 1px solid #ffcc02;
+}
+
+.status-approved {
+    background: #e8f5e8;
+    color: #46b450;
+    border: 1px solid #46b450;
+}
+
+.status-rejected {
+    background: #ffeaea;
+    color: #d63638;
+    border: 1px solid #d63638;
+}
+
+.status-active {
+    background: #e8f5e8;
+    color: #46b450;
+    border: 1px solid #46b450;
+}
+
+.status-inactive {
+    background: #f1f1f1;
+    color: #666;
+    border: 1px solid #ccc;
+}
+
