@@ -10,6 +10,14 @@ if (!defined('ABSPATH')) {
 
 // Handle form submission
 if (isset($_POST['submit']) && wp_verify_nonce($_POST['lfcc_settings_nonce'], 'lfcc_settings_save')) {
+    
+    // FIRST: Handle subdomain_enabled checkbox explicitly
+    $subdomain_enabled_value = isset($_POST['subdomain_enabled']) ? 'yes' : 'no';
+    LFCC_Leave_Settings::update_option('subdomain_enabled', $subdomain_enabled_value);
+    
+    // Also save directly to WordPress options as absolute backup
+    update_option('lfcc_leave_subdomain_enabled', $subdomain_enabled_value);
+    
     $settings_to_save = array(
         // Organization settings
         'organization_name',
@@ -99,8 +107,9 @@ if (isset($_POST['submit']) && wp_verify_nonce($_POST['lfcc_settings_nonce'], 'l
     $saved_subdomain_name = LFCC_Leave_Settings::get_option('subdomain_name', '');
     
     $success_message = __('Settings saved successfully!', 'lfcc-leave-management');
+    $success_message .= '<br><strong>Subdomain Status:</strong> ' . ($saved_subdomain_enabled === 'yes' ? '✓ ENABLED' : '✗ DISABLED');
     if ($saved_subdomain_enabled === 'yes' && !empty($saved_subdomain_name)) {
-        $success_message .= ' ' . sprintf(__('Subdomain configured: %s', 'lfcc-leave-management'), 
+        $success_message .= ' - ' . sprintf(__('Configured as: %s', 'lfcc-leave-management'), 
             '<strong>' . esc_html($saved_subdomain_name) . '.' . esc_html(parse_url(get_site_url(), PHP_URL_HOST)) . '</strong>');
     }
     
